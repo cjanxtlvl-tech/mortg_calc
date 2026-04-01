@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!--
+  mortgage-calculator.html
+  VeeCasa Mortgage Calculator — standalone page template.
+
+  WordPress integration:
+    1. Copy this file to your active theme as page-calculator.php (or
+       enqueue the scripts/styles via functions.php and use a shortcode).
+    2. Replace the <link> and <script> src paths with <?php echo
+       get_template_directory_uri(); ?>/assets/... equivalents.
+    3. The <main class="vc-calc"> block can be dropped into any page
+       template or used via the [veecasa_calculator] shortcode.
+
+  Standalone use (testing):
+    Open directly in a browser. All calculations happen client-side.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Calculator — VeeCasa</title>
+  <link rel="stylesheet" href="assets/css/mortgage-calculator.css" />
+</head>
+<body>
+
+<main class="vc-calc">
+
+  <!-- ── Error banner ──────────────────────────────────────────────────────── -->
+  <div id="vc-error-msg" class="vc-error vc-hidden" role="alert"></div>
+
+  <h1 class="vc-page-title">Mortgage Calculator</h1>
+
+  <!-- ══ Main two-column layout ═══════════════════════════════════════════════ -->
+  <div class="vc-layout">
+
+    <!-- ── LEFT: Inputs ──────────────────────────────────────────────────── -->
+    <div class="vc-card vc-inputs-card">
+
+      <!-- Home Value -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-home-value">Home Value:</label>
+        <div class="vc-input-wrap">
+          <span class="vc-prefix">$</span>
+          <input id="vc-home-value" class="vc-input" type="number" value="200000"
+                 min="1" step="1000" inputmode="numeric" />
+        </div>
+      </div>
+
+      <!-- Down Payment (dollar + percent + slider) -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-down-payment-amount">Down Payment:</label>
+        <div class="vc-dp-wrap">
+          <span class="vc-prefix">$</span>
+          <input id="vc-down-payment-amount" class="vc-input" type="number"
+                 value="10000" min="0" step="1000" inputmode="numeric" />
+          <input id="vc-down-payment-percent" class="vc-input vc-input-pct"
+                 type="number" value="5.00" min="0" max="100" step="0.5"
+                 inputmode="decimal" />
+          <span class="vc-suffix">%</span>
+        </div>
+      </div>
+      <div class="vc-slider-row">
+        <input id="vc-down-payment-slider" class="vc-range-slider"
+               type="range" min="0" max="100" step="0.5" value="5" />
+      </div>
+
+      <!-- Loan Amount (read-only) -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-loan-amount">Loan Amount:</label>
+        <div class="vc-input-wrap">
+          <span class="vc-prefix">$</span>
+          <input id="vc-loan-amount" class="vc-input" type="number"
+                 value="190000" readonly aria-label="Calculated loan amount" />
+        </div>
+      </div>
+
+      <!-- Interest Rate -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-interest-rate">Interest Rate:</label>
+        <div class="vc-input-wrap">
+          <input id="vc-interest-rate" class="vc-input" type="number"
+                 value="6.00" min="0" max="30" step="0.05" inputmode="decimal" />
+          <span class="vc-suffix">%</span>
+        </div>
+      </div>
+      <div class="vc-slider-row">
+        <input id="vc-interest-rate-slider" class="vc-range-slider"
+               type="range" min="0" max="15" step="0.05" value="6" />
+      </div>
+
+      <!-- Loan Term -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-loan-term">Loan Term:</label>
+        <div class="vc-input-wrap">
+          <input id="vc-loan-term" class="vc-input" type="number"
+                 value="30" min="1" max="50" step="1" inputmode="numeric" />
+          <span class="vc-suffix">years</span>
+        </div>
+      </div>
+
+      <!-- Start Date -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-start-month">Start Date:</label>
+        <div class="vc-input-wrap">
+          <select id="vc-start-month" class="vc-input"></select>
+          <input id="vc-start-year" class="vc-input" type="number"
+                 value="2026" min="2020" max="2040" inputmode="numeric"
+                 style="max-width:80px" />
+        </div>
+      </div>
+
+      <!-- Property Tax -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-property-tax">Property Tax:</label>
+        <div class="vc-input-wrap">
+          <input id="vc-property-tax" class="vc-input" type="number"
+                 value="12000" min="0" step="100" inputmode="numeric" />
+          <span class="vc-suffix">$/year</span>
+        </div>
+      </div>
+
+      <!-- PMI -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-pmi">PMI:</label>
+        <div class="vc-input-wrap">
+          <input id="vc-pmi" class="vc-input" type="number"
+                 value="4.00" min="0" max="10" step="0.05" inputmode="decimal" />
+          <span class="vc-suffix">%</span>
+        </div>
+      </div>
+      <div class="vc-slider-row">
+        <input id="vc-pmi-slider" class="vc-range-slider"
+               type="range" min="0" max="5" step="0.05" value="4" />
+      </div>
+
+      <!-- Home Insurance -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-home-insurance">Home Insurance:</label>
+        <div class="vc-input-wrap">
+          <input id="vc-home-insurance" class="vc-input" type="number"
+                 value="1500" min="0" step="100" inputmode="numeric" />
+          <span class="vc-suffix">$/year</span>
+        </div>
+      </div>
+
+      <!-- Monthly HOA -->
+      <div class="vc-form-row">
+        <label class="vc-form-label" for="vc-hoa">Monthly HOA:</label>
+        <div class="vc-input-wrap">
+          <span class="vc-prefix">$</span>
+          <input id="vc-hoa" class="vc-input" type="number"
+                 value="0" min="0" step="10" inputmode="numeric" />
+        </div>
+      </div>
+
+    </div><!-- /vc-inputs-card -->
+
+    <!-- ── RIGHT: Summary panel ──────────────────────────────────────────── -->
+    <div class="vc-card vc-summary-card">
+
+      <!-- Monthly payment headline -->
+      <div id="vc-result-monthly-payment" class="vc-monthly-amt">$0.00</div>
+      <div class="vc-monthly-label">Your estimated monthly payment with PMI.</div>
+
+      <div class="vc-summary-line">
+        <span>PMI:</span>
+        <span id="vc-result-pmi">$0.00</span>
+      </div>
+      <div class="vc-summary-line">
+        <span>Monthly Tax Paid:</span>
+        <span id="vc-result-monthly-tax">$0.00</span>
+      </div>
+      <div class="vc-summary-line">
+        <span>Monthly Home Insurance:</span>
+        <span id="vc-result-monthly-insurance">$0.00</span>
+      </div>
+
+      <!-- PMI info -->
+      <div class="vc-pmi-block">
+        <div class="vc-pmi-line">
+          <span>PMI End Date:</span>
+          <span id="vc-result-pmi-end-date">N/A</span>
+        </div>
+        <div class="vc-pmi-line">
+          <span>Total PMI Payments:</span>
+          <span id="vc-result-pmi-payments">—</span>
+        </div>
+        <div class="vc-pmi-line">
+          <span>Monthly Payment after PMI:</span>
+          <span id="vc-result-payment-after-pmi" class="vc-payment-after-pmi">$0.00</span>
+        </div>
+      </div>
+
+      <!-- Loan Breakdown donut -->
+      <div class="vc-breakdown-title">Loan Breakdown</div>
+      <div class="vc-donut-wrap">
+        <canvas id="vc-donut-chart" width="140" height="140"
+                aria-label="Loan breakdown donut chart"></canvas>
+        <div class="vc-donut-legend">
+          <div><span class="vc-legend-dot" style="background:#1565c0"></span>Principal</div>
+          <div><span class="vc-legend-dot" style="background:#0e90d2"></span>Interest</div>
+          <div><span class="vc-legend-dot" style="background:#4caf50"></span>Tax</div>
+          <div><span class="vc-legend-dot" style="background:#ff9800"></span>HOA &amp; Ins.</div>
+          <div><span class="vc-legend-dot" style="background:#9c27b0"></span>Downpayment</div>
+        </div>
+      </div>
+
+      <!-- Show / hide amortization -->
+      <button id="vc-show-amort-btn" class="vc-amort-btn" type="button">
+        Show Amortization Table
+      </button>
+
+    </div><!-- /vc-summary-card -->
+
+  </div><!-- /vc-layout -->
+
+  <!-- ══ Monthly amortization (toggled) ═══════════════════════════════════════ -->
+  <section id="vc-amort-panel" class="vc-card vc-amort-section vc-hidden"
+           aria-label="Monthly amortization schedule">
+    <h2 class="vc-section-title">Monthly Amortization Schedule</h2>
+    <div class="vc-table-wrap">
+      <table class="vc-table" aria-label="Monthly payment schedule">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Balance</th>
+            <th>P&amp;I Payment</th>
+            <th>Interest</th>
+            <th>Principal</th>
+            <th>PMI</th>
+            <th>Total Payment</th>
+            <th>End Balance</th>
+          </tr>
+        </thead>
+        <tbody id="vc-monthly-amort-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ Yearly amortization ═══════════════════════════════════════════════════ -->
+  <section class="vc-card vc-amort-section" aria-label="Yearly amortization summary">
+    <button id="vc-yearly-amort-toggle" class="vc-collapse-header" aria-expanded="false" aria-controls="vc-yearly-amort-body-wrap" type="button">
+      <span class="vc-collapse-title">Yearly Amortization Schedule</span>
+      <span class="vc-chevron" aria-hidden="true">&#8964;</span>
+    </button>
+    <div id="vc-yearly-amort-body-wrap" class="vc-table-wrap vc-hidden">
+      <table class="vc-table" aria-label="Yearly payment summary">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Interest</th>
+            <th>Principal</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="vc-yearly-amort-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ Bottom row: Mortgage Details + Bi-Weekly ══════════════════════════════ -->
+  <div class="vc-bottom-row">
+
+    <!-- Mortgage Details -->
+    <div class="vc-card">
+      <div class="vc-card-title">
+        <span class="vc-card-icon" aria-hidden="true">🏠</span>
+        Mortgage Details
+      </div>
+
+      <div class="vc-detail-line">
+        <span class="vc-detail-label">Loan Amount:</span>
+        <span id="vc-detail-loan-amount" class="vc-detail-value">$0.00</span>
+        <div class="vc-bar-track"><div id="vc-bar-loan" class="vc-bar-fill"></div></div>
+        <span id="vc-bar-loan-pct" class="vc-bar-label">0%</span>
+      </div>
+
+      <div class="vc-detail-line">
+        <span class="vc-detail-label">Down Payment:</span>
+        <span id="vc-detail-down-payment" class="vc-detail-value">$0.00</span>
+        <div class="vc-bar-track" style="opacity:0"></div>
+        <span class="vc-bar-label"></span>
+      </div>
+
+      <div class="vc-detail-line">
+        <span class="vc-detail-label">Total Interest Paid:</span>
+        <span id="vc-detail-total-interest" class="vc-detail-value">$0.00</span>
+        <div class="vc-bar-track"><div id="vc-bar-interest" class="vc-bar-fill"></div></div>
+        <span id="vc-bar-interest-pct" class="vc-bar-label">0%</span>
+      </div>
+
+      <div class="vc-detail-line">
+        <span class="vc-detail-label">Total PMI:</span>
+        <span id="vc-detail-total-pmi" class="vc-detail-value">$0.00</span>
+        <div class="vc-bar-track"><div id="vc-bar-pmi" class="vc-bar-fill"></div></div>
+        <span id="vc-bar-pmi-pct" class="vc-bar-label">0%</span>
+      </div>
+
+      <div class="vc-detail-line">
+        <span class="vc-detail-label">Total Tax Paid:</span>
+        <span id="vc-detail-total-tax" class="vc-detail-value">$0.00</span>
+        <div class="vc-bar-track"><div id="vc-bar-tax" class="vc-bar-fill"></div></div>
+        <span id="vc-bar-tax-pct" class="vc-bar-label">0%</span>
+      </div>
+
+      <div class="vc-detail-line">
+        <span class="vc-detail-label">Total Home Insurance:</span>
+        <span id="vc-detail-total-insurance" class="vc-detail-value">$0.00</span>
+        <div class="vc-bar-track"><div id="vc-bar-insurance" class="vc-bar-fill"></div></div>
+        <span id="vc-bar-insurance-pct" class="vc-bar-label">0%</span>
+      </div>
+
+      <div class="vc-detail-total">
+        <span>Total of <span id="vc-detail-total-payments">360</span> Payments:</span>
+      </div>
+      <div class="vc-detail-total" style="font-weight:700;font-size:1rem">
+        <span>Loan pay-off date:</span>
+        <span id="vc-detail-payoff">—</span>
+      </div>
+    </div><!-- /Mortgage Details -->
+
+    <!-- Monthly vs Bi-Weekly -->
+    <div class="vc-card">
+      <div class="vc-card-title">
+        <span class="vc-card-icon" aria-hidden="true">⚖️</span>
+        Monthly Vs Bi-Weekly Payment
+      </div>
+
+      <div class="vc-biweekly-grid">
+        <div>
+          <div id="vc-biweekly-monthly-payment" class="vc-biweekly-val">$0.00</div>
+          <div class="vc-biweekly-sub">Monthly Payment</div>
+        </div>
+        <div>
+          <div id="vc-biweekly-payment" class="vc-biweekly-val">$0.00</div>
+          <div class="vc-biweekly-sub">Bi-weekly Payment</div>
+        </div>
+        <div>
+          <div id="vc-biweekly-monthly-payoff" class="vc-biweekly-val">—</div>
+          <div class="vc-biweekly-sub">Monthly Pay-off Date</div>
+        </div>
+        <div>
+          <div id="vc-biweekly-payoff" class="vc-biweekly-val">—</div>
+          <div class="vc-biweekly-sub">Bi-weekly Pay-off Date</div>
+        </div>
+        <div>
+          <div id="vc-biweekly-monthly-interest" class="vc-biweekly-val">$0.00</div>
+          <div class="vc-biweekly-sub">Total Interest Paid</div>
+        </div>
+        <div>
+          <div id="vc-biweekly-total-interest" class="vc-biweekly-val">$0.00</div>
+          <div class="vc-biweekly-sub">Total Interest Paid</div>
+        </div>
+        <div class="vc-savings-line">
+          Total Interest Savings:
+          <strong id="vc-biweekly-savings">$0.00</strong>
+        </div>
+      </div>
+    </div><!-- /Bi-Weekly -->
+
+  </div><!-- /vc-bottom-row -->
+
+</main>
+
+<!-- ── Scripts (load order matters) ──────────────────────────────────────────
+     WordPress: enqueue in functions.php with wp_enqueue_script() and
+     add proper dependencies between handles.
+-->
+<script>
+  // Expose modules on window for browser (non-module) use
+  window._mortgageMathLoading = true;
+</script>
+<script src="assets/js/mortgage-calculator/mortgageMath.js"></script>
+<script>
+  window._mortgageMath = (typeof module !== "undefined") ? {} : {
+    validateInput, normalizeDownPaymentFromPercent, normalizeDownPaymentFromAmount,
+    calculateLoanAmount, calculateMonthlyPI, calculateMonthlyCosts, calculateTotalMonthlyPayment
+  };
+</script>
+<script src="assets/js/mortgage-calculator/amortization.js"></script>
+<script>
+  window._mortgageAmortization = {
+    generateMonthlyAmortization, generateYearlyAmortization, calculatePmiEnd
+  };
+</script>
+<script src="assets/js/mortgage-calculator/biweekly.js"></script>
+<script>
+  window._mortgageBiweekly = { generateBiweeklySchedule };
+</script>
+<script src="assets/js/mortgage-calculator/formatters.js"></script>
+<script>
+  window._mortgageFormatters = {
+    formatCurrency, formatCurrencyShort, formatPercent, formatPercentRaw,
+    formatMonthYear, formatMonthYearFull, formatNumber, MONTH_NAMES_FULL
+  };
+</script>
+<script src="assets/js/mortgage-calculator/mortgageCalculator.js"></script>
+<script src="assets/js/mortgage-calculator/mortgageCalculatorUI.js"></script>
+
+</body>
+</html>

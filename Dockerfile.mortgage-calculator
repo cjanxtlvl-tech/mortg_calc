@@ -1,0 +1,40 @@
+# Dockerfile.mortgage-calculator
+# Serves the VeeCasa Mortgage Calculator as a static site via nginx.
+#
+# Build:  docker build -f Dockerfile.mortgage-calculator -t mortgage-calculator .
+# Run:    docker run -p 8080:80 mortgage-calculator
+# Open:   http://localhost:8080/mortgage-calculator.html
+
+FROM nginx:alpine
+
+# Remove the default nginx welcome page
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy the calculator HTML to the document root.
+# The HTML references assets/css/… and assets/js/…, so css/ and js/
+# must live one level below the server root under an "assets/" directory.
+COPY site/themes/veecasa/assets/mortgage-calculator.html \
+     /usr/share/nginx/html/mortgage-calculator.html
+
+COPY site/themes/veecasa/assets/css/ \
+     /usr/share/nginx/html/assets/css/
+
+COPY site/themes/veecasa/assets/js/ \
+     /usr/share/nginx/html/assets/js/
+
+# Redirect bare / to the calculator page for convenience
+RUN printf 'server {\n\
+    listen       80;\n\
+    server_name  localhost;\n\
+    root         /usr/share/nginx/html;\n\
+\n\
+    location = / {\n\
+        return 301 /mortgage-calculator.html;\n\
+    }\n\
+\n\
+    location / {\n\
+        try_files $uri $uri/ =404;\n\
+    }\n\
+}\n' > /etc/nginx/conf.d/default.conf
+
+EXPOSE 80

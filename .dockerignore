@@ -1,0 +1,7 @@
+# .dockerignore for the mortgage-calculator image
+# Exclude everything except the static calculator files to keep the image small.
+
+**
+!site/themes/veecasa/assets/mortgage-calculator.html
+!site/themes/veecasa/assets/css/
+!site/themes/veecasa/assets/js/

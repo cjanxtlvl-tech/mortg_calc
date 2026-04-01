@@ -1,0 +1,509 @@
+/*
+ * mortgage-calculator.css
+ * VeeCasa Mortgage Calculator — standalone styles.
+ * Scoped under .vc-calc to avoid conflicts with the WordPress theme.
+ */
+
+/* ── Reset & base ──────────────────────────────────────────────────────────── */
+.vc-calc *,
+.vc-calc *::before,
+.vc-calc *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.vc-calc {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, sans-serif;
+  font-size: 15px;
+  color: #2c3e50;
+  background: #f4f6f9;
+  padding: 24px 16px 48px;
+}
+
+.vc-hidden {
+  display: none !important;
+}
+
+/* ── Collapsible section header ────────────────────────────────────────────── */
+.vc-collapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a2940;
+  text-align: left;
+  border-bottom: 1px solid #e0e6ef;
+  margin-bottom: 0;
+}
+
+.vc-collapse-header:hover {
+  color: #0e90d2;
+}
+
+.vc-collapse-title {
+  flex: 1;
+}
+
+.vc-chevron {
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+  transform: rotate(0deg);
+  display: inline-block;
+  color: #0e90d2;
+}
+
+.vc-collapse-header[aria-expanded="true"] .vc-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Page title ────────────────────────────────────────────────────────────── */
+.vc-calc .vc-page-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 28px;
+  color: #1a2940;
+}
+
+/* ── Two-column layout ─────────────────────────────────────────────────────── */
+.vc-calc .vc-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (max-width: 860px) {
+  .vc-calc .vc-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.vc-calc .vc-card {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 0;
+}
+
+/* ── Form inputs ───────────────────────────────────────────────────────────── */
+.vc-calc .vc-form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+
+.vc-calc .vc-form-label {
+  width: 160px;
+  min-width: 140px;
+  font-weight: 500;
+  color: #4a5568;
+  flex-shrink: 0;
+}
+
+.vc-calc .vc-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vc-calc .vc-prefix,
+.vc-calc .vc-suffix {
+  color: #718096;
+  font-weight: 500;
+  padding: 7px 8px;
+  background: #f0f2f5;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.vc-calc .vc-input {
+  flex: 1;
+  height: 38px;
+  padding: 6px 10px;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #2c3e50;
+  background: #fafbfc;
+  transition: border-color 0.2s;
+  outline: none;
+  min-width: 0;
+}
+
+.vc-calc .vc-input:focus {
+  border-color: #0e90d2;
+  background: #fff;
+}
+
+.vc-calc .vc-input[readonly] {
+  background: #f0f2f5;
+  color: #718096;
+}
+
+/* Down payment row — dollar + percent side by side */
+.vc-calc .vc-dp-wrap {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.vc-calc .vc-dp-wrap .vc-input {
+  flex: 2;
+}
+
+.vc-calc .vc-dp-wrap .vc-input-pct {
+  flex: 1;
+  min-width: 60px;
+}
+
+/* ── Sliders ───────────────────────────────────────────────────────────────── */
+.vc-calc .vc-slider-row {
+  padding-left: 160px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 480px) {
+  .vc-calc .vc-slider-row {
+    padding-left: 0;
+  }
+}
+
+.vc-calc .vc-range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #0e90d2 5%, #dde3eb 5%);
+  outline: none;
+  cursor: pointer;
+}
+
+.vc-calc .vc-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0e90d2;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.vc-calc .vc-range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0e90d2;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Result summary panel ──────────────────────────────────────────────────── */
+.vc-calc .vc-summary-card {
+  position: sticky;
+  top: 20px;
+}
+
+.vc-calc .vc-monthly-amt {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #1a2940;
+  margin-bottom: 4px;
+}
+
+.vc-calc .vc-monthly-label {
+  font-size: 0.85rem;
+  color: #718096;
+  margin-bottom: 16px;
+}
+
+.vc-calc .vc-summary-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f2f5;
+  font-size: 0.9rem;
+}
+
+.vc-calc .vc-summary-line:last-child {
+  border-bottom: none;
+}
+
+.vc-calc .vc-summary-bold {
+  font-weight: 600;
+}
+
+/* PMI info block */
+.vc-calc .vc-pmi-block {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #f0f2f5;
+}
+
+.vc-calc .vc-pmi-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.9rem;
+}
+
+.vc-calc .vc-payment-after-pmi {
+  font-weight: 700;
+}
+
+/* Loan breakdown chart section */
+.vc-calc .vc-breakdown-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+
+.vc-calc .vc-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vc-calc #vc-donut-chart {
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.vc-calc .vc-donut-legend {
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vc-calc .vc-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+/* Show amortization button */
+.vc-calc .vc-amort-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 9px 0;
+  background: #ffffff;
+  border: 1px solid #0e90d2;
+  color: #0e90d2;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.vc-calc .vc-amort-btn:hover {
+  background: #e8f6fd;
+}
+
+/* ── Bottom cards: Mortgage Details + Bi-Weekly ────────────────────────────── */
+.vc-calc .vc-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 24px auto 0;
+}
+
+@media (max-width: 720px) {
+  .vc-calc .vc-bottom-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vc-calc .vc-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1a2940;
+}
+
+.vc-calc .vc-card-icon {
+  font-size: 1.4rem;
+}
+
+/* Detail rows with progress bar */
+.vc-calc .vc-detail-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #f4f6f9;
+}
+
+.vc-calc .vc-detail-label {
+  width: 190px;
+  min-width: 140px;
+  color: #4a5568;
+  flex-shrink: 0;
+}
+
+.vc-calc .vc-detail-value {
+  min-width: 110px;
+  font-weight: 600;
+  color: #1a2940;
+}
+
+.vc-calc .vc-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #f0f2f5;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.vc-calc .vc-bar-fill {
+  height: 100%;
+  background: #1565c0;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.vc-calc .vc-bar-label {
+  min-width: 50px;
+  text-align: right;
+  font-size: 0.78rem;
+  color: #718096;
+}
+
+.vc-calc .vc-detail-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0 4px;
+  font-size: 0.92rem;
+}
+
+/* Bi-weekly card grid */
+.vc-calc .vc-biweekly-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 24px;
+}
+
+.vc-calc .vc-biweekly-val {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a2940;
+}
+
+.vc-calc .vc-biweekly-sub {
+  font-size: 0.78rem;
+  color: #718096;
+  margin-top: 2px;
+}
+
+.vc-calc .vc-savings-line {
+  grid-column: span 2;
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid #f0f2f5;
+  font-weight: 600;
+  color: #0e90d2;
+  font-size: 0.95rem;
+}
+
+/* ── Amortization tables ───────────────────────────────────────────────────── */
+.vc-calc .vc-amort-section {
+  max-width: 1100px;
+  margin: 24px auto 0;
+}
+
+.vc-calc .vc-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.vc-calc .vc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.vc-calc .vc-table th {
+  background: #f0f2f5;
+  padding: 9px 12px;
+  text-align: right;
+  font-weight: 600;
+  color: #4a5568;
+  white-space: nowrap;
+}
+
+.vc-calc .vc-table th:first-child {
+  text-align: left;
+}
+
+.vc-calc .vc-table td {
+  padding: 7px 12px;
+  text-align: right;
+  border-bottom: 1px solid #f4f6f9;
+  color: #2c3e50;
+}
+
+.vc-calc .vc-table td:first-child {
+  text-align: left;
+  color: #0e90d2;
+  font-weight: 600;
+}
+
+.vc-calc .vc-table .vc-principal {
+  color: #0e90d2;
+}
+
+.vc-calc .vc-table tbody tr:hover {
+  background: #f9fbfc;
+}
+
+/* ── Error message ─────────────────────────────────────────────────────────── */
+.vc-calc .vc-error {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+  color: #7d5a00;
+}
+
+/* ── Section headings ──────────────────────────────────────────────────────── */
+.vc-calc .vc-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #1a2940;
+}

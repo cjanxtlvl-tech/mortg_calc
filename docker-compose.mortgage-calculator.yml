@@ -1,0 +1,10 @@
+services:
+  mortgage-calculator:
+    build:
+      context: .
+      dockerfile: Dockerfile.mortgage-calculator
+    image: mortgage-calculator:latest
+    container_name: mortgage-calculator
+    ports:
+      - "8080:80"
+    restart: unless-stopped

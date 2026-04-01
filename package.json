@@ -1,0 +1,15 @@
+{
+  "name": "mortgage-calculator-standalone",
+  "version": "1.0.0",
+  "description": "Standalone static mortgage calculator UI and formula engine.",
+  "private": true,
+  "scripts": {
+    "start": "bash start-mortgage-ui.sh",
+    "test": "node site/themes/veecasa/assets/js/mortgage-calculator/mortgageCalculator.test.js"
+  },
+  "keywords": [
+    "mortgage",
+    "calculator"
+  ],
+  "license": "UNLICENSED"
+}
