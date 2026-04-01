@@ -5,89 +5,146 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mortgage Calculator | VeeCasa</title>
   <meta name="description" content="Estimate your monthly mortgage payment and compare options with VeeCasa." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/mortgage-calculator.css" />
 </head>
 <body>
   <header class="hero">
-    <div class="container">
-      <p class="eyebrow">Trusted by 50,000+ Homebuyers</p>
-      <h1>Compare Mortgage Options in Minutes</h1>
-      <p class="subtitle">Answer a few quick questions and estimate your monthly payment.</p>
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Trusted by 50,000+ Homebuyers</p>
+        <h1>Compare Mortgage Options in Minutes</h1>
+        <p class="subtitle">Answer a few quick questions and see personalized options from 300+ verified lenders.</p>
+        <div class="trust-row">
+          <span>256-bit Encrypted</span>
+          <span>No Obligation</span>
+          <span>NMLS Licensed</span>
+        </div>
+      </div>
+      <aside class="quick-check">
+        <h2>Check Local Options</h2>
+        <p>Enter your ZIP code to continue.</p>
+        <input type="text" placeholder="ZIP code" aria-label="ZIP code" />
+        <a class="cta-link" href="https://veecasa.com/form/">Continue</a>
+      </aside>
     </div>
   </header>
 
   <main class="container">
-    <section class="card" aria-labelledby="calc-heading">
-      <h2 id="calc-heading">Estimate Your Monthly Payment</h2>
-      <p>Adjust the inputs to see what your mortgage could look like.</p>
-
-      <form id="mortgage-form" class="form-grid">
-        <label>
-          Home Value ($)
-          <input id="homeValue" type="number" min="1" step="1000" value="400000" required />
-        </label>
-        <label>
-          Down Payment ($)
-          <input id="downPayment" type="number" min="0" step="1000" value="80000" required />
-        </label>
-        <label>
-          Interest Rate (%)
-          <input id="interestRate" type="number" min="0" step="0.01" value="6.8" required />
-        </label>
-        <label>
-          Loan Term (Years)
-          <input id="loanTermYears" type="number" min="1" step="1" value="30" required />
-        </label>
-        <label>
-          Property Tax / Year ($)
-          <input id="propertyTaxYear" type="number" min="0" step="100" value="2700" required />
-        </label>
-        <label>
-          Home Insurance / Year ($)
-          <input id="insuranceYear" type="number" min="0" step="100" value="1500" required />
-        </label>
-        <label>
-          PMI / Month ($)
-          <input id="pmiMonth" type="number" min="0" step="10" value="0" required />
-        </label>
-        <label>
-          HOA / Month ($)
-          <input id="hoaMonth" type="number" min="0" step="10" value="0" required />
-        </label>
-        <div class="actions">
-          <button type="submit">Calculate Payment</button>
-        </div>
-      </form>
-
-      <section class="results" aria-live="polite">
-        <h3>Total Monthly Payment</h3>
-        <p id="totalMonthly" class="big">$0</p>
-        <ul>
-          <li>Principal and Interest: <strong id="principalInterest">$0</strong></li>
-          <li>Property Tax: <strong id="taxMonthly">$0</strong></li>
-          <li>Insurance: <strong id="insuranceMonthly">$0</strong></li>
-          <li>PMI: <strong id="pmiMonthly">$0</strong></li>
-          <li>HOA: <strong id="hoaMonthly">$0</strong></li>
-          <li>Loan Amount: <strong id="loanAmount">$0</strong></li>
-          <li>Total Interest: <strong id="totalInterest">$0</strong></li>
-          <li>Payoff Year: <strong id="payoffYear">-</strong></li>
-        </ul>
-      </section>
+    <section class="product-strip" aria-label="Loan types">
+      <article>Purchase</article>
+      <article>Refinance</article>
+      <article>Government</article>
+      <article>Jumbo</article>
+      <article>Investment</article>
+      <article>Commercial</article>
     </section>
 
-    <section class="links" aria-labelledby="products-heading">
-      <h2 id="products-heading">Products</h2>
-      <ul>
-        <li><a href="https://veecasa.com/purchase-loans/">Purchase Loan</a></li>
-        <li><a href="https://veecasa.com/refinance-loans/">Refinance Loan</a></li>
-        <li><a href="https://veecasa.com/government-loans/">Government Loans</a></li>
-        <li><a href="https://veecasa.com/jumbo-loans/">Jumbo Loan</a></li>
-      </ul>
+    <section class="card" aria-labelledby="calc-heading">
+      <h2 id="calc-heading">Estimate Your Monthly Payment</h2>
+      <p>Adjust the inputs to see what your mortgage could look like, then compare real lender offers.</p>
+
+      <div class="calc-layout">
+        <form id="mortgage-form" class="form-grid">
+          <label>
+            Home Value ($)
+            <input id="homeValue" type="number" min="1" step="1000" value="400000" required />
+          </label>
+          <label>
+            Down Payment ($)
+            <input id="downPayment" type="number" min="0" step="1000" value="80000" required />
+          </label>
+          <label>
+            Interest Rate (%)
+            <input id="interestRate" type="number" min="0" step="0.01" value="6.8" required />
+          </label>
+          <label>
+            Loan Term (Years)
+            <input id="loanTermYears" type="number" min="1" step="1" value="30" required />
+          </label>
+          <label>
+            Property Tax / Year ($)
+            <input id="propertyTaxYear" type="number" min="0" step="100" value="2700" required />
+          </label>
+          <label>
+            Home Insurance / Year ($)
+            <input id="insuranceYear" type="number" min="0" step="100" value="1500" required />
+          </label>
+          <label>
+            PMI / Month ($)
+            <input id="pmiMonth" type="number" min="0" step="10" value="0" required />
+          </label>
+          <label>
+            HOA / Month ($)
+            <input id="hoaMonth" type="number" min="0" step="10" value="0" required />
+          </label>
+          <div class="actions">
+            <button type="submit">Calculate Payment</button>
+          </div>
+        </form>
+
+        <section class="results" aria-live="polite">
+          <h3>Total Monthly Payment</h3>
+          <p id="totalMonthly" class="big">$0</p>
+          <ul>
+            <li>Principal and Interest: <strong id="principalInterest">$0</strong></li>
+            <li>Property Tax: <strong id="taxMonthly">$0</strong></li>
+            <li>Insurance: <strong id="insuranceMonthly">$0</strong></li>
+            <li>PMI: <strong id="pmiMonthly">$0</strong></li>
+            <li>HOA: <strong id="hoaMonthly">$0</strong></li>
+            <li>Loan Amount: <strong id="loanAmount">$0</strong></li>
+            <li>Total Interest: <strong id="totalInterest">$0</strong></li>
+            <li>Payoff Year: <strong id="payoffYear">-</strong></li>
+          </ul>
+          <a class="cta-link secondary" href="https://veecasa.com/form/">Start My Quote</a>
+        </section>
+      </div>
+    </section>
+
+    <section class="process">
+      <h2>Three Steps to Your Best Rate</h2>
+      <div class="steps-grid">
+        <article><span>01</span><h3>Tell Us Your Goal</h3><p>Choose loan type and answer quick questions.</p></article>
+        <article><span>02</span><h3>Share Your Details</h3><p>Provide property details and preferences.</p></article>
+        <article><span>03</span><h3>Get Matched</h3><p>Compare offers from lenders in our network.</p></article>
+      </div>
+    </section>
+
+    <section class="rates">
+      <h2>Educational Rate Overview</h2>
+      <div class="rate-grid">
+        <article><h3>30-Year Fixed</h3><p class="rate">6.8%</p><p>Conventional Purchase</p></article>
+        <article><h3>Government Backed</h3><p class="rate">6.3%</p><p>FHA / VA style options</p></article>
+        <article><h3>15-Year Fixed</h3><p class="rate">6.2%</p><p>Conventional Refinance</p></article>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>Common Questions</h2>
+      <details><summary>Does requesting a quote affect my credit score?</summary><p>Initial matching generally uses soft checks and profile information.</p></details>
+      <details><summary>How long does the process take?</summary><p>Most users can complete the intake flow in under 3 minutes.</p></details>
+      <details><summary>Is this free for borrowers?</summary><p>Yes, comparing offers through the platform has no borrower fee.</p></details>
+    </section>
+
+    <section class="final-cta">
+      <h2>Ready to Find Your Best Mortgage Rate?</h2>
+      <p>Join thousands of buyers and investors matching with lenders quickly.</p>
+      <a class="cta-link" href="https://veecasa.com/form/">Start My Quote</a>
     </section>
   </main>
 
   <footer class="footer">
     <div class="container footer-grid">
+      <div>
+        <h3>Products</h3>
+        <ul>
+          <li><a href="https://veecasa.com/purchase-loans/">Purchase Loan</a></li>
+          <li><a href="https://veecasa.com/refinance-loans/">Refinance Loan</a></li>
+          <li><a href="https://veecasa.com/commercial-loans/">Commercial Loan</a></li>
+        </ul>
+      </div>
       <div>
         <h3>Resources</h3>
         <ul>
@@ -108,8 +165,12 @@
         <ul>
           <li><a href="https://veecasa.com/privacy-policy/">Privacy Policy</a></li>
           <li><a href="https://veecasa.com/terms-of-use/">Terms of Use</a></li>
+          <li><a href="https://veecasa.com/legal-disclaimer/">Disclaimer</a></li>
         </ul>
       </div>
+    </div>
+    <div class="container legal-copy">
+      <p>ClearPath Mortgage is a mortgage lead generation platform, not a lender. Rates shown are educational and not guaranteed.</p>
     </div>
   </footer>
 
