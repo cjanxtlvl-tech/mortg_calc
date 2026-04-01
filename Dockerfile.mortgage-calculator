@@ -29,7 +29,7 @@ RUN printf 'server {\n\
     root         /usr/share/nginx/html;\n\
 \n\
     location = / {\n\
-        return 301 /mortgage-calculator.html;\n\
+        return 301 $scheme://$http_host/mortgage-calculator.html;\n\
     }\n\
 \n\
     location / {\n\

@@ -1,311 +1,530 @@
+/*
+ * mortgage-calculator.css
+ * VeeCasa Mortgage Calculator — standalone styles.
+ * Scoped under .vc-calc to avoid conflicts with the WordPress theme.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Sora:wght@300;400;600;700&display=swap");
+
 :root {
-  --bg: #f1f5fb;
-  --text: #152033;
-  --brand: #2368ff;
-  --brand-dark: #1849b7;
-  --card: #ffffff;
-  --border: #d4deea;
-  --muted: #5b6f86;
+  --vc-brand-navy: #0d1f3c;
+  --vc-brand-navy-hover: #1e3d6e;
+  --vc-brand-blue: #2563eb;
+  --vc-brand-blue-hover: #3b82f6;
+  --vc-brand-blue-soft: #93c5fd;
+  --vc-surface: #f8faff;
+  --vc-border: #e2e8f0;
+  --vc-text: #0d1f3c;
+  --vc-text-muted: #64748b;
+  --vc-text-subtle: #94a3b8;
+  --vc-page-bg: #f1f5f9;
 }
 
-* {
+/* ── Reset & base ──────────────────────────────────────────────────────────── */
+.vc-calc *,
+.vc-calc *::before,
+.vc-calc *::after {
   box-sizing: border-box;
-}
-
-body {
   margin: 0;
-  font-family: "Outfit", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: var(--text);
-  background:
-    radial-gradient(circle at 15% -5%, #dcebff 0, #f1f5fb 36%),
-    radial-gradient(circle at 90% 10%, #e4f0ff 0, #f1f5fb 42%),
-    var(--bg);
+  padding: 0;
 }
 
-.container {
-  width: min(1080px, 92vw);
+.vc-calc {
+  font-family: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  color: var(--vc-text);
+  background: var(--vc-page-bg);
+  padding: 24px 16px 48px;
+}
+
+.vc-hidden {
+  display: none !important;
+}
+
+/* ── Collapsible section header ────────────────────────────────────────────── */
+.vc-collapse-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--vc-text);
+  text-align: left;
+  border-bottom: 1px solid var(--vc-border);
+  margin-bottom: 0;
+}
+
+.vc-collapse-header:hover {
+  color: var(--vc-brand-blue);
+}
+
+.vc-collapse-title {
+  flex: 1;
+}
+
+.vc-chevron {
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+  transform: rotate(0deg);
+  display: inline-block;
+  color: var(--vc-brand-blue);
+}
+
+.vc-collapse-header[aria-expanded="true"] .vc-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Page title ────────────────────────────────────────────────────────────── */
+.vc-calc .vc-page-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.9rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 28px;
+  color: var(--vc-text);
+}
+
+/* ── Two-column layout ─────────────────────────────────────────────────────── */
+.vc-calc .vc-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-.hero {
-  padding: 56px 0 28px;
+@media (max-width: 860px) {
+  .vc-calc .vc-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 20px;
-  align-items: start;
-}
-
-.eyebrow {
-  color: var(--brand);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  font-size: 0.78rem;
-}
-
-h1 {
-  margin: 10px 0;
-  font-size: clamp(2rem, 4.5vw, 3.4rem);
-  line-height: 1.08;
-}
-
-.subtitle {
-  margin: 0;
-  color: var(--muted);
-  font-size: 1.06rem;
-}
-
-.trust-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-}
-
-.trust-row span {
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 6px 10px;
-  font-size: 0.86rem;
-  background: #f8fbff;
-}
-
-.quick-check {
-  background: #0f1e34;
-  color: #dfe8f5;
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 16px 36px rgba(14, 27, 47, 0.28);
-}
-
-.quick-check h2 {
-  color: #fff;
-  margin-top: 0;
-}
-
-.quick-check input {
-  width: 100%;
-  margin: 8px 0 12px;
-  border: 1px solid #2e4465;
-  background: #10233e;
-  color: #fff;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.vc-calc .vc-card {
+  background: var(--vc-surface);
+  border-radius: 10px;
+  border: 1.5px solid var(--vc-border);
+  box-shadow: 0 10px 26px rgba(13, 31, 60, 0.06);
   padding: 24px;
-  box-shadow: 0 12px 30px rgba(18, 36, 59, 0.1);
+  margin-bottom: 0;
 }
 
-.product-strip {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(110px, 1fr));
-  gap: 10px;
-  margin-bottom: 22px;
-}
-
-.product-strip article {
-  border: 1px solid var(--border);
-  background: #fff;
-  border-radius: 12px;
-  padding: 10px;
-  text-align: center;
-  font-weight: 600;
-  color: #31445f;
-}
-
-.calc-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 16px;
-  align-items: start;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(180px, 1fr));
-  gap: 12px;
-}
-
-label {
+/* ── Form inputs ───────────────────────────────────────────────────────────── */
+.vc-calc .vc-form-row {
   display: flex;
-  flex-direction: column;
-  font-weight: 600;
+  align-items: center;
+  margin-bottom: 14px;
+  gap: 8px;
+}
+
+.vc-calc .vc-form-label {
+  width: 160px;
+  min-width: 140px;
+  font-weight: 500;
+  color: var(--vc-text-muted);
+  flex-shrink: 0;
+}
+
+.vc-calc .vc-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
   gap: 6px;
 }
 
-input {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 11px;
-  font-size: 1rem;
-}
-
-.actions {
-  grid-column: 1 / -1;
-}
-
-button {
-  background: var(--brand);
-  border: 0;
-  color: #fff;
-  font-weight: 800;
-  border-radius: 12px;
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.15s ease;
-}
-
-button:hover {
-  background: var(--brand-dark);
-  transform: translateY(-1px);
-}
-
-.results {
-  background: #f7fafe;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-}
-
-.results ul {
-  margin: 8px 0 0;
-  padding-left: 18px;
-}
-
-.big {
-  font-size: 2.2rem;
-  color: var(--brand);
-  margin: 4px 0;
-  font-weight: 800;
-}
-
-.process,
-.rates,
-.faq,
-.final-cta,
-.footer {
-  margin-top: 28px;
-}
-
-.steps-grid,
-.rate-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.steps-grid article,
-.rate-grid article {
-  border: 1px solid var(--border);
-  border-radius: 14px;
+.vc-calc .vc-prefix,
+.vc-calc .vc-suffix {
+  color: var(--vc-text-muted);
+  font-weight: 500;
+  padding: 7px 8px;
   background: #fff;
-  padding: 14px;
+  border: 1px solid var(--vc-border);
+  border-radius: 6px;
+  white-space: nowrap;
+  user-select: none;
 }
 
-.steps-grid span {
-  display: inline-flex;
+.vc-calc .vc-input {
+  flex: 1;
+  height: 38px;
+  padding: 6px 10px;
+  border: 1px solid var(--vc-border);
+  border-radius: 6px;
+  font-size: 15px;
+  color: var(--vc-text);
+  background: #fff;
+  transition: border-color 0.2s;
+  outline: none;
+  min-width: 0;
+}
+
+.vc-calc .vc-input:focus {
+  border-color: var(--vc-brand-blue);
+  background: #fff;
+}
+
+.vc-calc .vc-input[readonly] {
+  background: var(--vc-page-bg);
+  color: var(--vc-text-muted);
+}
+
+/* Down payment row — dollar + percent side by side */
+.vc-calc .vc-dp-wrap {
+  flex: 1;
+  display: flex;
+  gap: 6px;
   align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
+}
+
+.vc-calc .vc-dp-wrap .vc-input {
+  flex: 2;
+}
+
+.vc-calc .vc-dp-wrap .vc-input-pct {
+  flex: 1;
+  min-width: 60px;
+}
+
+/* ── Sliders ───────────────────────────────────────────────────────────────── */
+.vc-calc .vc-slider-row {
+  padding-left: 160px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 480px) {
+  .vc-calc .vc-slider-row {
+    padding-left: 0;
+  }
+}
+
+.vc-calc .vc-range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--vc-brand-blue) 5%, var(--vc-border) 5%);
+  outline: none;
+  cursor: pointer;
+}
+
+.vc-calc .vc-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: #eaf1ff;
-  color: var(--brand-dark);
-  font-weight: 800;
+  background: var(--vc-brand-blue);
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-.rate {
-  font-size: 2rem;
-  color: var(--brand);
-  font-weight: 800;
-  margin: 4px 0;
+.vc-calc .vc-range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--vc-brand-blue);
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-.faq details {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 10px;
+/* ── Result summary panel ──────────────────────────────────────────────────── */
+.vc-calc .vc-summary-card {
+  position: sticky;
+  top: 20px;
 }
 
-.final-cta {
-  text-align: center;
-  background: linear-gradient(120deg, #0f2442, #16335e);
-  color: #e7eefb;
-  padding: 26px;
-  border-radius: 18px;
+.vc-calc .vc-monthly-amt {
+  font-family: "Fraunces", serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--vc-text);
+  margin-bottom: 4px;
 }
 
-.final-cta h2 {
-  color: #fff;
-}
-
-.cta-link {
-  display: inline-block;
-  text-decoration: none;
-  font-weight: 700;
-  color: #fff;
-  background: var(--brand);
-  padding: 11px 14px;
-  border-radius: 10px;
-}
-
-.cta-link.secondary {
-  margin-top: 8px;
-}
-
-.footer {
-  background: #0f1724;
-  color: #d9e3f1;
-  padding: 26px 0;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-}
-
-a {
-  color: inherit;
-}
-
-.legal-copy {
-  border-top: 1px solid #23314b;
-  margin-top: 18px;
-  padding-top: 14px;
+.vc-calc .vc-monthly-label {
   font-size: 0.85rem;
-  color: #a9bdd9;
+  color: var(--vc-text-muted);
+  margin-bottom: 16px;
 }
 
-@media (max-width: 900px) {
-  .hero-grid,
-  .calc-layout {
-    grid-template-columns: 1fr;
-  }
+.vc-calc .vc-summary-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--vc-border);
+  font-size: 0.9rem;
+}
 
-  .product-strip,
-  .steps-grid,
-  .rate-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.vc-calc .vc-summary-line:last-child {
+  border-bottom: none;
+}
 
-  .form-grid {
+.vc-calc .vc-summary-bold {
+  font-weight: 600;
+}
+
+/* PMI info block */
+.vc-calc .vc-pmi-block {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--vc-border);
+}
+
+.vc-calc .vc-pmi-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.9rem;
+}
+
+.vc-calc .vc-payment-after-pmi {
+  font-weight: 700;
+}
+
+/* Loan breakdown chart section */
+.vc-calc .vc-breakdown-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+
+.vc-calc .vc-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.vc-calc #vc-donut-chart {
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.vc-calc .vc-donut-legend {
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vc-calc .vc-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+/* Show amortization button */
+.vc-calc .vc-amort-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 9px 0;
+  background: #fff;
+  border: 1px solid var(--vc-brand-blue);
+  color: var(--vc-brand-blue);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.vc-calc .vc-amort-btn:hover {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+/* ── Bottom cards: Mortgage Details + Bi-Weekly ────────────────────────────── */
+.vc-calc .vc-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 24px auto 0;
+}
+
+@media (max-width: 720px) {
+  .vc-calc .vc-bottom-row {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 560px) {
-  .product-strip,
-  .steps-grid,
-  .rate-grid {
-    grid-template-columns: 1fr;
-  }
+.vc-calc .vc-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--vc-text);
+  font-family: "Fraunces", serif;
+}
+
+.vc-calc .vc-card-icon {
+  font-size: 1.4rem;
+}
+
+/* Detail rows with progress bar */
+.vc-calc .vc-detail-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 0.88rem;
+  border-bottom: 1px solid var(--vc-border);
+}
+
+.vc-calc .vc-detail-label {
+  width: 190px;
+  min-width: 140px;
+  color: var(--vc-text-muted);
+  flex-shrink: 0;
+}
+
+.vc-calc .vc-detail-value {
+  min-width: 110px;
+  font-weight: 600;
+  color: var(--vc-text);
+}
+
+.vc-calc .vc-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--vc-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.vc-calc .vc-bar-fill {
+  height: 100%;
+  background: var(--vc-brand-blue);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.vc-calc .vc-bar-label {
+  min-width: 50px;
+  text-align: right;
+  font-size: 0.78rem;
+  color: var(--vc-text-muted);
+}
+
+.vc-calc .vc-detail-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0 4px;
+  font-size: 0.92rem;
+}
+
+/* Bi-weekly card grid */
+.vc-calc .vc-biweekly-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 24px;
+}
+
+.vc-calc .vc-biweekly-val {
+  font-family: "Fraunces", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--vc-text);
+}
+
+.vc-calc .vc-biweekly-sub {
+  font-size: 0.78rem;
+  color: var(--vc-text-muted);
+  margin-top: 2px;
+}
+
+.vc-calc .vc-savings-line {
+  grid-column: span 2;
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--vc-border);
+  font-weight: 600;
+  color: var(--vc-brand-blue);
+  font-size: 0.95rem;
+}
+
+/* ── Amortization tables ───────────────────────────────────────────────────── */
+.vc-calc .vc-amort-section {
+  max-width: 1100px;
+  margin: 24px auto 0;
+}
+
+.vc-calc .vc-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.vc-calc .vc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.vc-calc .vc-table th {
+  background: #eef4ff;
+  padding: 9px 12px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--vc-text-muted);
+  white-space: nowrap;
+}
+
+.vc-calc .vc-table th:first-child {
+  text-align: left;
+}
+
+.vc-calc .vc-table td {
+  padding: 7px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--vc-border);
+  color: var(--vc-text);
+}
+
+.vc-calc .vc-table td:first-child {
+  text-align: left;
+  color: var(--vc-brand-blue);
+  font-weight: 600;
+}
+
+.vc-calc .vc-table .vc-principal {
+  color: var(--vc-brand-blue);
+}
+
+.vc-calc .vc-table tbody tr:hover {
+  background: rgba(147, 197, 253, 0.15);
+}
+
+/* ── Error message ─────────────────────────────────────────────────────────── */
+.vc-calc .vc-error {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+  color: #7d5a00;
+}
+
+/* ── Section headings ──────────────────────────────────────────────────────── */
+.vc-calc .vc-section-title {
+  font-family: "Fraunces", serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--vc-text);
 }
