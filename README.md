@@ -14,6 +14,30 @@ This repository contains only the files required to run the VeeCasa mortgage cal
 docker compose -f docker-compose.mortgage-calculator.yml up --build -d
 ```
 
+### One-command launch scripts (with orphan cleanup)
+
+Windows PowerShell:
+
+```powershell
+.\start-mortgage-docker.ps1 -Rebuild
+```
+
+macOS/Linux:
+
+```bash
+./start-mortgage-docker.sh --rebuild
+```
+
+Optional full cleanup (remove compose volumes too):
+
+```powershell
+.\start-mortgage-docker.ps1 -Rebuild -Clean
+```
+
+```bash
+./start-mortgage-docker.sh --rebuild --clean
+```
+
 Open:
 
 ```text

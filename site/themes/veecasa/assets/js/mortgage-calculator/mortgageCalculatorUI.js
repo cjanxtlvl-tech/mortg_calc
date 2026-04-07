@@ -194,7 +194,7 @@ function renderResults(result) {
   setText("vc-detail-total-interest", formatCurrency(result.totalInterestPaid));
   setText("vc-detail-total-pmi",
     result.totalPMIPaid > 0
-      ? `$0.00 to ${formatMonthYear(result.pmiEndDate)}`
+      ? `${formatCurrency(result.totalPMIPaid)} to ${formatMonthYear(result.pmiEndDate)}`
       : "$0.00"
   );
   setText("vc-detail-total-tax", formatCurrency(result.totalTaxPaid));
@@ -204,13 +204,20 @@ function renderResults(result) {
   );
   setText("vc-detail-payoff", formatMonthYear(result.payoffDate));
 
-  // Bar widths for mortgage detail percentages
-  const total = result.totalOfAllPayments || 1;
-  setBarWidth("vc-bar-loan",      result.loanAmount / total);
-  setBarWidth("vc-bar-interest",  result.totalInterestPaid / total);
-  setBarWidth("vc-bar-pmi",       result.totalPMIPaid / total);
-  setBarWidth("vc-bar-tax",       result.totalTaxPaid / total);
-  setBarWidth("vc-bar-insurance", result.totalHomeInsurancePaid / total);
+  // Bar widths for mortgage detail percentages (only categories shown in this card)
+  const detailBreakdownTotal =
+    result.loanAmount +
+    result.totalInterestPaid +
+    result.totalPMIPaid +
+    result.totalTaxPaid +
+    result.totalHomeInsurancePaid;
+  setDetailBars([
+    { id: "vc-bar-loan", value: result.loanAmount },
+    { id: "vc-bar-interest", value: result.totalInterestPaid },
+    { id: "vc-bar-pmi", value: result.totalPMIPaid },
+    { id: "vc-bar-tax", value: result.totalTaxPaid },
+    { id: "vc-bar-insurance", value: result.totalHomeInsurancePaid },
+  ], detailBreakdownTotal);
 
   // Bi-weekly card
   setText("vc-biweekly-monthly-payment",   formatCurrency(result.monthlyPayment));
@@ -228,12 +235,37 @@ function renderResults(result) {
   renderYearlyTable(result.yearlyAmortization);
 }
 
-function setBarWidth(id, ratio) {
+function setDetailBars(items, total) {
+  if (!total || total <= 0) {
+    items.forEach((item) => setBarPercentage(item.id, 0));
+    return;
+  }
+
+  const rawPercentages = items.map((item) => (item.value / total) * 100);
+  const rounded = rawPercentages.map((pct) => Math.round(pct * 100) / 100);
+  const roundedSum = rounded.reduce((sum, pct) => sum + pct, 0);
+  const delta = Math.round((100 - roundedSum) * 100) / 100;
+
+  if (delta !== 0) {
+    const largestIndex = rawPercentages.reduce(
+      (best, pct, index, arr) => (pct > arr[best] ? index : best),
+      0
+    );
+    rounded[largestIndex] += delta;
+  }
+
+  items.forEach((item, index) => {
+    setBarPercentage(item.id, rounded[index]);
+  });
+}
+
+function setBarPercentage(id, percent) {
   const el = document.getElementById(id);
   if (el) {
-    const pct = Math.min(100, Math.max(0, ratio * 100));
+    const safePercent = Number.isFinite(percent) ? percent : 0;
+    const pct = Math.min(100, Math.max(0, safePercent));
     el.style.width = pct.toFixed(2) + "%";
-    const label = el.nextElementSibling;
+    const label = document.getElementById(`${id}-pct`);
     if (label) label.textContent = pct.toFixed(2) + "%";
   }
 }
